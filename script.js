@@ -89,18 +89,28 @@
   }, true));
 
   /* ---------- smooth scroll ---------- */
+  // Phones and tablets scroll natively (Lenis only smooths the mouse wheel);
+  // ScrollTrigger.normalizeScroll keeps pinned sections in sync on touch.
+  const isTouch = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  let normalizer = null;
   let lenis = null;
-  if (motion && window.Lenis) {
+  if (motion && window.Lenis && !isTouch) {
     lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
   }
-  const stopScroll = () => lenis && lenis.stop();
-  const startScroll = () => lenis && lenis.start();
+  const stopScroll = () => {
+    if (lenis) lenis.stop();
+    else { document.documentElement.classList.add('no-scroll'); if (normalizer) normalizer.disable(); }
+  };
+  const startScroll = () => {
+    if (lenis) lenis.start();
+    else { document.documentElement.classList.remove('no-scroll'); if (normalizer) normalizer.enable(); }
+  };
   const scrollToTarget = target => {
     if (lenis) lenis.scrollTo(target, { duration: 1.6, easing: t => 1 - Math.pow(1 - t, 4) });
-    else target.scrollIntoView({ behavior: 'smooth' });
+    else window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
   };
 
   /* ---------- header hides on scroll down ---------- */
@@ -653,6 +663,8 @@ Notes: ${notes}` : '');
      Motion
      ========================================================= */
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  if (isTouch) normalizer = ScrollTrigger.normalizeScroll({ allowNestedScroll: true, type: 'touch' });
   body.classList.add('is-loading');
   stopScroll();
 
@@ -766,7 +778,7 @@ Notes: ${notes}` : '');
       defaults: { ease: 'power2.inOut' },
       scrollTrigger: {
         trigger: s.sec, start: 'top top', end: () => '+=' + innerHeight * s.length,
-        pin: $('.story__pin', s.sec), scrub: 1, invalidateOnRefresh: true,
+        pin: $('.story__pin', s.sec), scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
         onUpdate: self => setStoryStep(s, self.progress)
       }
     });
@@ -780,7 +792,7 @@ Notes: ${notes}` : '');
   gsap.set(callouts, { autoAlpha: 0, x: (i, el) => (el.classList.contains('callout--l') ? -30 : 30) });
   placeCallouts(0);
   const anaTl = gsap.timeline({
-    scrollTrigger: { trigger: '.anatomy', start: 'top top', end: () => '+=' + innerHeight * 2, pin: '.anatomy__pin', scrub: 1, invalidateOnRefresh: true, onRefresh: () => placeCallouts(parseFloat(gsap.getProperty(layers, '--gap')) || 0) }
+    scrollTrigger: { trigger: '.anatomy', start: 'top top', end: () => '+=' + innerHeight * 2, pin: '.anatomy__pin', scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: () => placeCallouts(parseFloat(gsap.getProperty(layers, '--gap')) || 0) }
   });
   anaTl
     .to(layers, {

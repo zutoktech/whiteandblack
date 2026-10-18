@@ -802,3 +802,13 @@ body.menu-open .nav{opacity:0;pointer-events:none}
   .tilt--unbox{top:62%}
   .unbox__shadow{top:74%}
 }
+/* touch devices: lock scroll when menus open, lighter effects for smooth pinning */
+html.no-scroll,html.no-scroll body{overflow:hidden}
+html,body{overflow-anchor:none}
+@media (hover:none) and (pointer:coarse),(max-width:899px){
+  body::after{display:none}
+  .stage__dust{display:none}
+  .glass{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(26,26,26,.94)}
+  .bubble{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(44,44,44,.94)}
+  .stage__spot{filter:none}
+}
