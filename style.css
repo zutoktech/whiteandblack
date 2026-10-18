@@ -476,7 +476,7 @@ body.menu-open .nav{opacity:0;pointer-events:none}
 .finish-foil .ccard__who b{-webkit-background-clip:text;background-clip:text;color:transparent}
 .corner-round{--rad:18px}
 .build__hint{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:var(--head);text-transform:uppercase;font-size:11px;letter-spacing:.18em;color:#8a8a8a}
-.build__lead{color:var(--muted);max-width:440px;margin:-36px 0 34px;position:relative}
+.build__lead{color:var(--muted);max-width:440px;margin:0 0 34px}
 .opt{margin-bottom:24px}
 .opt__label{font-family:var(--head);text-transform:uppercase;font-size:12px;letter-spacing:.14em;margin-bottom:10px}
 .opt__inputs{display:flex;gap:10px}
@@ -691,7 +691,7 @@ body.menu-open .nav{opacity:0;pointer-events:none}
   .story__steps{margin-bottom:10px;min-height:3.6em}
   .ustep{font-size:16px}
   .story__text .btn{display:none}
-  .story__bar{margin-bottom:0}
+  .story__bar{margin-bottom:12px}
   .story__scene{height:60vh;transform:scale(.6);transform-origin:50% 22%;margin:0 -33%}
   .arches{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:62vw;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none;margin-right:-16px}
   .arches::-webkit-scrollbar{display:none}
@@ -757,7 +757,7 @@ body.menu-open .nav{opacity:0;pointer-events:none}
 .about__founders b{color:var(--fg);font-weight:600}
 .faq__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:70px;align-items:start}
 .faq__head{position:sticky;top:110px}
-.faq__note{color:var(--muted);margin-top:-30px}
+.faq__note{color:var(--muted)}
 .faq__note a{color:var(--fg);border-bottom:1px solid currentColor}
 .faq__item{border-top:1px solid var(--line)}
 .faq__item:last-child{border-bottom:1px solid var(--line)}
@@ -779,7 +779,7 @@ body.menu-open .nav{opacity:0;pointer-events:none}
 .footer__products a:hover{color:#fff}
 .footer__bar nav span{color:#777}
 @media (max-width:899px){
-  .story__desc{font-size:13px;margin:-4px 0 6px;max-width:none}
+  .story__desc{font-size:13px;margin:0 0 6px;max-width:none}
   .story__more{margin-bottom:0}
   .about__facts{grid-template-columns:1fr;gap:18px}
   .faq__grid{grid-template-columns:minmax(0,1fr);gap:20px}
@@ -788,3 +788,17 @@ body.menu-open .nav{opacity:0;pointer-events:none}
 }
 /* titles that are paragraphs (for a clean heading outline) keep the display font */
 .story__title,.showreel__title{font-family:var(--head);text-transform:uppercase;color:var(--fg)}
+
+/* headings that are not inside .section-head still need room below them */
+.build__panel .section-title,.faq__head .section-title{margin-bottom:24px}
+/* layout guards found by the multi-screen test */
+.process{overflow-x:clip}
+@media (min-width:900px) and (max-width:1100px){
+  .story__grid{grid-template-columns:330px minmax(0,1fr);gap:24px}
+  .story__title{font-size:50px}
+}
+@media (max-width:899px){
+  .story__scene{margin-top:18px}
+  .tilt--unbox{top:62%}
+  .unbox__shadow{top:74%}
+}

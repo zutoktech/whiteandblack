@@ -82,6 +82,12 @@
     dust.appendChild(d);
   }
 
+  // FAQ: opening one answer closes the others
+  document.querySelectorAll('.faq__list').forEach(list => list.addEventListener('toggle', e => {
+    if (!e.target.open) return;
+    list.querySelectorAll('details[open]').forEach(d => { if (d !== e.target) d.open = false; });
+  }, true));
+
   /* ---------- smooth scroll ---------- */
   let lenis = null;
   if (motion && window.Lenis) {
@@ -452,7 +458,8 @@ Notes: ${notes}` : '');
     const heroFlip = $('.dcard__flip', hero);
     const sweep = $('.foil-sweep', hero);
     const mid = (n - 1) / 2;
-    const grid = k => (isMobile()
+    // 3 columns when the scene is wide enough, otherwise 2 columns x 3 rows
+    const grid = k => ($('#deckScene').offsetWidth < 820
       ? { x: ((k % 2) - 0.5) * 262, y: (Math.floor(k / 2) - 1) * 176 }
       : { x: ((k % 3) - 1) * 256, y: (Math.floor(k / 3) - 0.5) * 186 });
     gsap.set(tilt, { rotationX: 62, scale: 0.8, y: 60 });
@@ -802,7 +809,7 @@ Notes: ${notes}` : '');
     });
     const placeNib = p => {
       const pt = path.getPointAtLength(len * p);
-      gsap.set(nib, { x: pt.x / 1000 * pen.offsetWidth, y: pt.y / 120 * pen.offsetHeight });
+      gsap.set(nib, { x: Math.min(pt.x / 1000 * pen.offsetWidth, pen.offsetWidth - nib.offsetWidth), y: pt.y / 120 * pen.offsetHeight });
       stepEls.forEach((s, i) => s.classList.toggle('is-active', p >= stops[i] - 0.005));
       anchors.forEach((a, i) => a.classList.toggle('is-active', p >= stops[i] - 0.005));
     };

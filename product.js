@@ -22,6 +22,12 @@
     f.appendChild(t);
   });
 
+  // FAQ: opening one answer closes the others
+  document.querySelectorAll('.faq__list').forEach(list => list.addEventListener('toggle', e => {
+    if (!e.target.open) return;
+    list.querySelectorAll('details[open]').forEach(d => { if (d !== e.target) d.open = false; });
+  }, true));
+
   // header hides while scrolling down
   const header = $('#header');
   let lastY = 0;
